@@ -43,3 +43,15 @@ bot.on("message", async message => {
 })
 
 bot.login(botconfig.token);
+bot.on("message", async message => {
+    const prefix = botconfig.prefix;
+    if(message.author.bot || message.channel.type === 'dm') return;
+    if(!message.content.startsWith(prefix)) return;
+
+    const [ cmd, ...args ] = message.content.slice(prefix.length).split(/ +/g) 
+
+    let commandFile = bot.commands.find(c => c.triggers.includes(cmd.toLowerCase()));
+    if(commandFile) commandFile.run(bot, message, args)
+})
+
+bot.login(botconfig.token);
